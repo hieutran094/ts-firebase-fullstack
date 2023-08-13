@@ -1,0 +1,79 @@
+{
+  "emulators": {
+    "hosting": {
+      "port": 5050
+    },
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "database": {
+      "port": 9000
+    },
+    "storage": {
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "runtime": "nodejs18",
+    "source": ".output/server",
+    "predeploy": [
+      "yarn build:api"
+    ],
+    "ignore": [
+      "**/node_modules/**",
+      "**/src/**",
+      "**/public/**",
+      "**/.vscode/**",
+      "**/.github/**",
+      "**/.git/**",
+      "README.md",
+      "package-lock.json",
+      "yarn.lock",
+      "nodemon.json",
+      "jest.config.js",
+      "tsconfig.json"
+    ]
+  },
+  "hosting": {
+    "public": ".output/public",
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "server",
+        "region": "asia-northeast1"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}
