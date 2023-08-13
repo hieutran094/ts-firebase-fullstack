@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-import { eventHandler } from "h3";
+import { defineEventHandler, H3Event } from "h3";
 import { controllers } from "../controllers";
 import { MetadataKeys } from "../utils/metadata.keys";
 
@@ -16,12 +16,18 @@ export default defineNitroPlugin((nitroApp) => {
       controllerClass
     );
 
+    const guards: any[] =
+      Reflect.getMetadata(MetadataKeys.GUARD, controllerClass) || [];
+
     routers.forEach(({ method, path, handlerName }) => {
       nitroApp.router.use(
         basePath + path,
-        eventHandler(
-          controllerInstance[String(handlerName)].bind(controllerInstance)
-        ),
+        defineEventHandler({
+          handler:
+            controllerInstance[String(handlerName)].bind(controllerInstance),
+          before: guards,
+        }),
+
         method
       );
     });

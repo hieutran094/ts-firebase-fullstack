@@ -5,9 +5,12 @@ import { UserService } from "../services";
 import { createOneSchema, updateOneSchema } from "./dto/user.dto";
 import Controller from "../decorators/controller.decorator";
 import { Get } from "../decorators/handlers.decorator";
+import UseGuards from "../decorators/guard.decorator";
+import { ServerGuard } from "../guards";
 
 @Controller("/api/v1/user")
-export default class QuestionController extends BaseController<UserModel> {
+@UseGuards(ServerGuard)
+export default class UserController extends BaseController<UserModel> {
   constructor(
     @inject(UserService)
     public service: UserService
